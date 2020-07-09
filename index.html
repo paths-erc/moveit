@@ -16,8 +16,9 @@
   <body class="h-100">
     <div class="container-fluid h-100">
       <div class="row h-100">
-        <div class="col-4 p-5">
+        <div class="col-sm-4 p-5">
 
+          <h3 class="mb-3">Calculate directions between PAThs places</h3>
 
           <div class="form-group">
             <label for="from">From</label>
@@ -37,7 +38,7 @@
 
         </div>
 
-        <div class="col-8 h-100">
+        <div class="col-sm-8 h-100">
           <div id="map" class="h-100"></div>
         </div>
       </div>
@@ -58,12 +59,23 @@
 
       const from = document.getElementById('from');
       const to = document.getElementById('to');
-      fetch('https://db.bradypus.net/api/v2/paths?verb=search&pretty=1&shortsql=@places~[id,name,geodata.geometry~%2Bgeodata||places.id|=|^paths__geodata.id_link||and|geodata.table_link|=|paths__places~-0:500')
+      fetch('https://db.bradypus.net/api/v2/paths?verb=search&pretty=1&geojson=1&shortsql=@places~[id,name,geodata.geometry~%2Bgeodata||places.id|=|^paths__geodata.id_link||and|geodata.table_link|=|paths__places~-0:500~>name:asc')
         .then(resp => resp.json())
         .then(d => {
-          d.records.map( e => {
-            from.options[from.options.length] = new Option(e.name, e.geometry.replace('(', '').replace(')', '').replace('POINT', '').trim())
-            to.options[to.options.length] = new Option(e.name, e.geometry.replace('(', '').replace(')', '').replace('POINT', '').trim())
+
+          L.geoJSON(d, {
+            pointToLayer: (t, i, col) => {
+              return new L.CircleMarker(i, {
+                radius: 5,
+                weight: 1,
+                color: '#0000ff'
+              })
+            }
+          }).addTo(map)
+
+          d.features.map( e => {
+            from.options[from.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '))
+            to.options[to.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '))
           });
         });
       
@@ -78,12 +90,18 @@
         const toCoord = to.value.split(' ');
 
         const path = calcPath(fromCoord, toCoord);
+        if (!path){
+          alert(`Cannot calculate path from ${from.options[from.selectedIndex].text} to ${to.options[to.selectedIndex].text}`);
+          return;
+        }
 
         if (typeof geoJsonLayer !== 'undefined'){
           map.removeLayer(geoJsonLayer);
         }
 
         geoJsonLayer = L.geoJSON(path).addTo(map);
+        map.fitBounds(geoJsonLayer.getBounds());
+
       })
     </script>
   </body>
