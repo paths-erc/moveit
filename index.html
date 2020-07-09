@@ -56,10 +56,6 @@
       // }).addTo(map);
       L.tileLayer('https://dh.gu.se/tiles/imperium/{z}/{x}/{y}.png').addTo(map);
 
-      L.marker([30.0594885,31.2584644]).addTo(map)
-          .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-          .openPopup();
-      
       const from = document.getElementById('from');
       const to = document.getElementById('to');
       fetch('https://db.bradypus.net/api/v2/paths?verb=search&pretty=1&shortsql=@places~[id,name,geodata.geometry~%2Bgeodata||places.id|=|^paths__geodata.id_link||and|geodata.table_link|=|paths__places~-0:500')
