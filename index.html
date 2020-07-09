@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link   rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" 
+            integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+            crossorigin=""/>
+
+    <title>Hello, world!</title>
+  </head>
+  <body class="h-100">
+    <div class="container-fluid h-100">
+      <div class="row h-100">
+        <div class="col-4 p-5">
+
+
+          <div class="form-group">
+            <label for="from">From</label>
+            <select class="form-control" id="from">
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="to">To</label>
+            <select class="form-control" id="to">
+            </select>
+          </div>
+
+          <div class="form-group">
+            <button class="btn btn-success m-auto" id="calculate">Calculate</button>
+          </div>
+
+        </div>
+
+        <div class="col-8 h-100">
+          <div id="map" class="h-100"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+            integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+            crossorigin=""></script>
+    <script src="./bundle.js"></script>
+
+    <script>
+      var map = L.map('map').setView([30.0594885,31.2584644], 8);
+
+      // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      // }).addTo(map);
+      L.tileLayer('https://dh.gu.se/tiles/imperium/{z}/{x}/{y}.png').addTo(map);
+
+      L.marker([30.0594885,31.2584644]).addTo(map)
+          .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+          .openPopup();
+      
+      const from = document.getElementById('from');
+      const to = document.getElementById('to');
+      fetch('https://db.bradypus.net/api/v2/paths?verb=search&pretty=1&shortsql=@places~[id,name,geodata.geometry~%2Bgeodata||places.id|=|^paths__geodata.id_link||and|geodata.table_link|=|paths__places~-0:500')
+        .then(resp => resp.json())
+        .then(d => {
+          d.records.map( e => {
+            from.options[from.options.length] = new Option(e.name, e.geometry.replace('(', '').replace(')', '').replace('POINT', '').trim())
+            to.options[to.options.length] = new Option(e.name, e.geometry.replace('(', '').replace(')', '').replace('POINT', '').trim())
+          });
+        });
+      
+      let geoJsonLayer;
+
+      document.getElementById('calculate').addEventListener('click', () => {
+        if (from.value === to.value){
+          alert('From e To can not be the same place!');
+          return;
+        }
+        const fromCoord = from.value.split(' ');
+        const toCoord = to.value.split(' ');
+
+        const path = calcPath(fromCoord, toCoord);
+
+        if (typeof geoJsonLayer !== 'undefined'){
+          map.removeLayer(geoJsonLayer);
+        }
+
+        geoJsonLayer = L.geoJSON(path).addTo(map);
+      })
+    </script>
+  </body>
+</html>
