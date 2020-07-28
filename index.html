@@ -78,6 +78,16 @@
         .then(d => {
 
           L.geoJSON(d, {
+            onEachFeature: (feature, layer ) => {
+              if (feature.properties && feature.properties.name) {
+                layer.bindPopup(`<div class="text-center">
+                  <strong>${feature.properties.name}</strong>
+                  <hr>
+                  <a href="https://atlas.paths-erc.eu/places${feature.properties.id}" target="_blank">paths.place.${feature.properties.id}</a>
+                  </div>
+                  `);
+              }
+            },
             pointToLayer: (t, i, col) => {
               return new L.CircleMarker(i, {
                 radius: 5,
