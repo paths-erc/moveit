@@ -98,21 +98,37 @@
           }).addTo(map)
 
           d.features.map( e => {
-            from.options[from.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '))
-            to.options[to.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '))
+            from.options[from.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '), false, (e.properties.name === data.fromPlace))
+            to.options[to.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '), false, (e.properties.name === data.toPlace))
           });
         });
       
       let geoJsonLayer;
 
-      document.getElementById('calculate').addEventListener('click', () => {
-        if (from.value === to.value){
-          alert('From e To can not be the same place!');
-          return;
-        }
-        const fromCoord = from.value.split(' ');
-        const toCoord = to.value.split(' ');
+      const coordsToHash = function (fromPlace, toPlace, fromCoord, toCoord){
+        window.location.hash = `${encodeURIComponent(fromPlace)}/${encodeURIComponent(toPlace)}/${fromCoord.join(',')}/${toCoord.join(',')}`;
+      }
 
+      const hashToCoords = () => {
+        let hashUrl = window.location.hash;
+
+        if (hashUrl === ''){
+          return false;
+        }
+        hashUrl = hashUrl.substring(1);
+
+        const parts = hashUrl.split('/');
+
+        return {
+          fromPlace : decodeURIComponent(parts[0]),
+          toPlace   : decodeURIComponent(parts[1]),
+          fromCoord : parts[2].split(','),
+          toCoord   : parts[3].split(','),
+        };
+      }
+
+
+      const calcAndShow = (fromCoord, toCoord) => {
         const path = calcPath(fromCoord, toCoord);
         if (!path){
           alert(`Cannot calculate path from ${from.options[from.selectedIndex].text} to ${to.options[to.selectedIndex].text}`);
@@ -125,8 +141,29 @@
 
         geoJsonLayer = L.geoJSON(path).addTo(map);
         map.fitBounds(geoJsonLayer.getBounds());
+      };
 
-      })
+
+
+      document.getElementById('calculate').addEventListener('click', () => {
+        if (from.value === to.value){
+          alert('From e To can not be the same place!');
+          return;
+        }
+        const fromCoord = from.value.split(' ');
+        const toCoord = to.value.split(' ');
+
+        coordsToHash(from.options[from.selectedIndex].text, to.options[to.selectedIndex].text, fromCoord, toCoord);
+
+        calcAndShow(fromCoord, toCoord);
+
+      });
+
+      const data = hashToCoords();
+      if ( data && data.fromCoord && data.toCoord ){
+        calcAndShow(data.fromCoord, data.toCoord);
+      }
+      
     </script>
   </body>
 </html>
