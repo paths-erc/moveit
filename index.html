@@ -20,10 +20,10 @@
 
           <h3 class="mb-3">Calculate directions between PAThs places</h3>
 
-          <div class="bg-danger p-3 my-5 text-white">
+          <div class="bg-warning p-3 my-5">
             <h5>CAVEAT</h5>
-            <p>This demo is <u>only a proof of concept</u> and the underlying data 
-              are <u>far from being considered complete or reliable</u>. Many connections are still missing
+            <p>This demo is <u>only a proof of concept</u> and the underlying road graph 
+              is <u>not yet complete or fully reliable</u>. Some connections might be missing
               and others need to be refined.</p>
           </div>
 
@@ -78,12 +78,16 @@
         .then(d => {
 
           L.geoJSON(d, {
-            onEachFeature: (feature, layer ) => {
+            onEachFeature: (feature, layer) => {
               if (feature.properties && feature.properties.name) {
                 layer.bindPopup(`<div class="text-center">
                   <strong>${feature.properties.name}</strong>
                   <hr>
-                  <a href="https://atlas.paths-erc.eu/places${feature.properties.id}" target="_blank">paths.place.${feature.properties.id}</a>
+                  <a href="https://atlas.paths-erc.eu/places/${feature.properties.id}" target="_blank"><big>paths.place.${feature.properties.id}</big></a>
+                  <hr>
+                  <a href="#" onclick="directions('from', '${feature.geometry.coordinates.join(' ')}')">Directions from here</a>
+                  |
+                  <a href="#" onclick="directions('to', '${feature.geometry.coordinates.join(' ')}')">Directions to here</a>
                   </div>
                   `);
               }
@@ -107,6 +111,11 @@
 
       const coordsToHash = function (fromPlace, toPlace, fromCoord, toCoord){
         window.location.hash = `${encodeURIComponent(fromPlace)}/${encodeURIComponent(toPlace)}/${fromCoord.join(',')}/${toCoord.join(',')}`;
+      }
+
+      const directions = (fromTo, coords) => {
+        document.querySelector(`#${fromTo} [value="${coords}"]`).selected = true;
+        return false;
       }
 
       const hashToCoords = () => {
