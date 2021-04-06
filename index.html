@@ -73,7 +73,7 @@
 
       const from = document.getElementById('from');
       const to = document.getElementById('to');
-      fetch('https://db.bradypus.net/api/v2/paths?verb=search&pretty=1&geojson=1&shortsql=@places~[id,name,geodata.geometry~%2Bgeodata||places.id|=|^paths__geodata.id_link||and|geodata.table_link|=|paths__places~-0:500~>name:asc')
+      fetch('https://bdus.cloud/db/api/paths?verb=search&&geojson=1&shortsql=@places~[id,name,geodata.geometry~-500:0~%3Ename:asc')
         .then(resp => resp.json())
         .then(d => {
 
