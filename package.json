@@ -1,0 +1,16 @@
+{
+  "name": "moveit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "pack": "cat src/geojson/arcs.geojson > src/geojson/arcs.json && browserify src/main.js | uglifyjs > bundle.js && rm src/geojson/arcs.json"
+  },
+  "devDependencies": {
+    "geojson-path-finder": "^1.5.2",
+    "leaflet": "^1.7.1",
+    "uglify-js": "^3.13.3"
+  },
+  "author": "Julian Bogdani",
+  "license": "ISC"
+}
