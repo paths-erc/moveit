@@ -1,10 +1,12 @@
 {
   "name": "moveit",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
-    "pack": "cat src/geojson/arcs.geojson > src/geojson/arcs.json && browserify src/main.js | uglifyjs > bundle.js && rm src/geojson/arcs.json"
+    "pack": "cat src/geojson/arcs.geojson > src/geojson/arcs.json && browserify src/main.js | uglifyjs > bundle.js && rm -rf src/geojson/arcs.json",
+    "serve": "cat src/geojson/arcs.geojson > src/geojson/arcs.json && watchify src/main.js -o bundle.js"
+
   },
   "devDependencies": {
     "browserify": "^17.0.0",
@@ -12,7 +14,8 @@
     "i": "^0.3.6",
     "leaflet": "^1.7.1",
     "npm": "^7.9.0",
-    "uglify-js": "^3.13.3"
+    "uglify-js": "^3.13.3",
+    "watchify": "^4.0.0"
   },
   "author": "Julian Bogdani",
   "license": "ISC"

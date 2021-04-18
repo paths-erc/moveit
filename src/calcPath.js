@@ -21,7 +21,7 @@ const calcPath = ( start, dest ) => {
         "features": [
             { 
             "type": "Feature", 
-            "properties": { "fid": 1, "name": "Alexandria-Sais" }, 
+            "properties": {}, 
             "geometry": { 
                 "type": "LineString", 
                 "coordinates": path.path
@@ -30,7 +30,10 @@ const calcPath = ( start, dest ) => {
         ]
     };
 
-    return GeoJson;
+    return {
+        "geojson": GeoJson,
+        "distance": (Math.round(path.weight * 100) / 100).toFixed(2)
+    };
 };
 
 const geoJsonFromArr = (lngLatArr) => {

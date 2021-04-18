@@ -1,5 +1,10 @@
 const L = require('leaflet');
 const calcPath = require('./calcPath');
+const hashToCoords = require('./hashToCoords');
+
+const hashData = hashToCoords();
+
+
 
 var map = L.map('map').setView([30.0594885,31.2584644], 8);
 
@@ -28,9 +33,11 @@ fetch(shortSQL).then(resp => resp.json()).then(d => {
             <hr>
             <a href="https://atlas.paths-erc.eu/places/${feature.properties.id}" target="_blank"><big>paths.place.${feature.properties.id}</big></a>
             <hr>
-            <a href="#" class="from" data-coords="${feature.geometry.coordinates.join(' ')}">Directions from here</a>
+            <a href="javascript:void(0)" class="from" data-coords="${feature.geometry.coordinates.join(' ')}">Directions from here</a>
             |
-            <a href="#" class="to" data-coords="${feature.geometry.coordinates.join(' ')}">Directions to here</a>
+            <a href="javascript:void(0)" class="to" data-coords="${feature.geometry.coordinates.join(' ')}">Directions to here</a>
+            |
+            <a href="javascript:void(0)" class="calculate" data-coords="${feature.geometry.coordinates.join(' ')}">Calculate</a>
             </div>
             `);
         }
@@ -45,8 +52,8 @@ fetch(shortSQL).then(resp => resp.json()).then(d => {
     }).addTo(map)
 
     d.features.map( e => {
-        from.options[from.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '), false, (e.properties.name === data.fromPlace))
-        to.options[to.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '), false, (e.properties.name === data.toPlace))
+        from.options[from.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '), false, (e.properties.name === hashData.fromLabel))
+        to.options[to.options.length] = new Option(e.properties.name, e.geometry.coordinates.join(' '), false, (e.properties.name === hashData.toLabel))
     });
 });
 
@@ -61,38 +68,20 @@ const directions = (fromTo, coords) => {
     return false;
 }
 
-const hashToCoords = () => {
-    let hashUrl = window.location.hash;
-
-    if (hashUrl === ''){
-        return false;
-    }
-    hashUrl = hashUrl.substring(1);
-
-    const parts = hashUrl.split('/');
-
-    return {
-        fromPlace : decodeURIComponent(parts[0]),
-        toPlace   : decodeURIComponent(parts[1]),
-        fromCoord : parts[2].split(','),
-        toCoord   : parts[3].split(','),
-    };
-}
-
-
-const calcAndShow = (fromCoord, toCoord) => {
-    const path = calcPath(fromCoord, toCoord);
-    if (!path){
-        alert(`Cannot calculate path from ${from.options[from.selectedIndex].text} to ${to.options[to.selectedIndex].text}`);
+const calcAndShow = (fromCoord, toCoord, fromLabel, toLabel) => {
+    const path = calcPath(fromCoord, toCoord, fromLabel, toLabel);
+    
+    if (!path.geojson){
+        alert(`Cannot calculate path from ${fromCoord} to ${toCoord}`);
         return;
     }
-
     if (typeof geoJsonLayer !== 'undefined'){
         map.removeLayer(geoJsonLayer);
     }
 
-    geoJsonLayer = L.geoJSON(path).addTo(map);
+    geoJsonLayer = L.geoJSON(path.geojson).addTo(map);
     map.fitBounds(geoJsonLayer.getBounds());
+    geoJsonLayer.bindPopup(`Distance from <strong>${fromLabel}</strong> to <strong>${toLabel}</strong>: <strong>${path.distance}</strong> km`).openPopup();
 };
 
 // Event listeners
@@ -110,15 +99,16 @@ document.addEventListener('click', (e) => {
         }
         const fromCoord = from.value.split(' ');
         const toCoord = to.value.split(' ');
+        const fromLabel = from.options[from.selectedIndex].text;
+        const toLabel = from.options[to.selectedIndex].text;
     
-        coordsToHash(from.options[from.selectedIndex].text, to.options[to.selectedIndex].text, fromCoord, toCoord);
+        coordsToHash(fromLabel, toLabel, fromCoord, toCoord);
     
-        calcAndShow(fromCoord, toCoord);
+        calcAndShow(fromCoord, toCoord, fromLabel, toLabel);
     }
 });
 
-const data = hashToCoords();
 
-if ( data && data.fromCoord && data.toCoord ){
-    calcAndShow(data.fromCoord, data.toCoord);
+if ( hashData && hashData.fromCoord && hashData.toCoord ){
+    calcAndShow(hashData.fromCoord, hashData.toCoord, hashData.fromLabel, hashData.toLabel);
 }
