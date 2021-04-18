@@ -4,8 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "pack": "cat src/geojson/arcs.geojson > src/geojson/arcs.json && browserify src/main.js | uglifyjs > bundle.js && rm -rf src/geojson/arcs.json",
-    "serve": "cat src/geojson/arcs.geojson > src/geojson/arcs.json && watchify src/main.js -o bundle.js"
+    "pack": "node ./src/convertGeoJSON.js && browserify src/main.js | uglifyjs > bundle.js",
+    "serve": "node ./src/convertGeoJSON.js && watchify src/main.js -o bundle.js"
 
   },
   "devDependencies": {
