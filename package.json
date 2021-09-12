@@ -6,7 +6,6 @@
   "scripts": {
     "pack": "node ./src/convertGeoJSON.js && browserify src/main.js | uglifyjs > bundle.js",
     "serve": "node ./src/convertGeoJSON.js && watchify src/main.js -o bundle.js"
-
   },
   "devDependencies": {
     "browserify": "^17.0.0",
@@ -14,10 +13,9 @@
     "i": "^0.3.6",
     "leaflet": "^1.7.1",
     "npm": "^7.9.0",
-    "uglify-js": "^3.13.3",
+    "uglify-js": "^3.14.2",
     "watchify": "^4.0.0"
   },
   "author": "Julian Bogdani",
   "license": "AGPL-3"
-
 }
