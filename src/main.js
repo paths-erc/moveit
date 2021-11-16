@@ -1,4 +1,5 @@
 const L = require('leaflet');
+const geojson  = require('./geojson/arcs.json');
 const calcPath = require('./calcPath');
 const hashToCoords = require('./hashToCoords');
 
@@ -69,19 +70,18 @@ const directions = (fromTo, coords) => {
 }
 
 const calcAndShow = (fromCoord, toCoord, fromLabel, toLabel) => {
-    const path = calcPath(fromCoord, toCoord, fromLabel, toLabel);
-    
-    if (!path.geojson){
+    try {
+        const path = calcPath(geojson, fromCoord, toCoord);
+        if (typeof geoJsonLayer !== 'undefined'){
+            map.removeLayer(geoJsonLayer);
+        }
+        geoJsonLayer = L.geoJSON(path.geojson).addTo(map);
+        map.fitBounds(geoJsonLayer.getBounds());
+        geoJsonLayer.bindPopup(`Distance from <strong>${fromLabel}</strong> to <strong>${toLabel}</strong>: <strong>${path.distance}</strong> km`).openPopup();
+    } catch (error) {
         alert(`Cannot calculate path from ${fromCoord} to ${toCoord}`);
         return;
     }
-    if (typeof geoJsonLayer !== 'undefined'){
-        map.removeLayer(geoJsonLayer);
-    }
-
-    geoJsonLayer = L.geoJSON(path.geojson).addTo(map);
-    map.fitBounds(geoJsonLayer.getBounds());
-    geoJsonLayer.bindPopup(`Distance from <strong>${fromLabel}</strong> to <strong>${toLabel}</strong>: <strong>${path.distance}</strong> km`).openPopup();
 };
 
 // Event listeners
