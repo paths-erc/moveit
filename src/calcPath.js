@@ -1,7 +1,14 @@
-const PathFinder    = require('geojson-path-finder');
-const geojson       = require('./geojson/arcs.json');
+const PathFinder = require('geojson-path-finder');
 
-const calcPath = ( start, dest ) => {
+
+/**
+ * 
+ * @param {object} geojson graph model, in geojson format
+ * @param {float} start array of coordinates of startig point
+ * @param {float} dest array of coordinates of destination point
+ * @returns 
+ */
+const calcPath = ( geojson, start, dest ) => {
 
     const gj_start = geoJsonFromArr(start);
     const gj_dest = geoJsonFromArr(dest);
@@ -11,8 +18,7 @@ const calcPath = ( start, dest ) => {
     const path = pathfinder.findPath(gj_start, gj_dest);
     
     if (!path){
-        console.log(`Cannot calculate path from ${start.join(', ')} to ${dest.join(', ')}`);
-        return false;
+        throw `Cannot calculate path from ${start.join(', ')} to ${dest.join(', ')}`;
     }
 
     const GeoJson = {
