@@ -5,10 +5,11 @@
   "main": "main.js",
   "scripts": {
     "pack": "node  ./src/convertGeoJSON.js && browserify src/main.js | uglifyjs > bundle.js",
-    "serve": "node ./src/convertGeoJSON.js && watchify src/main.js -o bundle.js",
+    "serve": "node ./src/convertGeoJSON.js && watchify src/main.js -o bundle.js | browser-sync start --server './' --files 'index.html' 'bundle.js'",
     "test": "node  ./src/convertGeoJSON.js && node ./src/test.js"
   },
   "devDependencies": {
+    "browser-sync": "^2.27.7",
     "browserify": "^17.0.0",
     "geojson-path-finder": "^1.5.2",
     "i": "^0.3.6",
