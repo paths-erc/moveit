@@ -40,14 +40,15 @@ const runTest = async () => {
   const loading_instace = loading();
 
   const error_list = [];
+  console.log(`Testing connections between ${all.length} points`);
   
 
   all.forEach(e => {
     all.forEach(eb => {
       if ( e.id !== eb.id ) {
         try {
-          calcPath(geojson, e.coord, eb.coord);
-          // console.log(`OK: path from ${e.name} to ${eb.name} calculated`);
+          const calucatedPath = calcPath(geojson, e.coord, eb.coord);
+          console.log(`OK: path from ${e.name} to ${eb.name} calculated: ${calucatedPath.distance} km`);
           
         } catch (error) {
           console.log(`Error: cannot calculate path from ${e.id}: ${e.name} to ${eb.id}: ${eb.name}`);
