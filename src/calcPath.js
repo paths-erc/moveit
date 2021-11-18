@@ -13,7 +13,14 @@ const calcPath = ( geojson, start, dest ) => {
     const gj_start = geoJsonFromArr(start);
     const gj_dest = geoJsonFromArr(dest);
 
-    const pathfinder = new PathFinder(geojson, { precision: 1e-3 });
+    const pathfinder = new PathFinder(geojson, { 
+        precision: 1e-3,
+        weightFn: function(a, b, props) {
+            const dx = a[0] - b[0];
+            const dy = a[1] - b[1];
+            return Math.sqrt(dx * dx + dy * dy) + props.typeWeight;
+        }
+    });
 
     const path = pathfinder.findPath(gj_start, gj_dest);
     
