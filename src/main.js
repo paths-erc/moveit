@@ -36,6 +36,13 @@ L.tileLayer(`https://dh.gu.se/tiles/imperium/{z}/{x}/{y}.png`)
           <select class="form-control" id="to"></select>
         </div>
       </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="considerTypeWeight" checked>
+        <label class="form-check-label" for="considerTypeWeight">
+          Consider route type
+        </label>
+      </div>
       
       <div class="d-grid">
         <button class="btn btn-success btn-block calculate">Calculate</button>
@@ -66,6 +73,7 @@ new L.Control.Panel({ position: 'topleft' }).addTo(map);
 
 const from = document.getElementById('from');
 const to = document.getElementById('to');
+const considerTypeWeightElement = document.getElementById('considerTypeWeight');
 
 const shortSQL = `https://bdus.cloud/db/api/paths?verb=search&&geojson=1&shortsql=${
 [
@@ -111,8 +119,8 @@ fetch(shortSQL).then(resp => resp.json()).then(d => {
 
 let geoJsonLayer;
 
-const coordsToHash = function (fromPlace, toPlace, fromCoord, toCoord){
-  window.location.hash = `${encodeURIComponent(fromPlace)}/${encodeURIComponent(toPlace)}/${fromCoord.join(',')}/${toCoord.join(',')}`;
+const coordsToHash = function (fromPlace, toPlace, fromCoord, toCoord, considerType){
+  window.location.hash = `${encodeURIComponent(fromPlace)}/${encodeURIComponent(toPlace)}/${fromCoord.join(',')}/${toCoord.join(',')}/${considerType ? 'considerType' : ''}`;
 }
 
 const directions = (fromTo, coords) => {
@@ -120,9 +128,9 @@ const directions = (fromTo, coords) => {
   return false;
 }
 
-const calcAndShow = (fromCoord, toCoord, fromLabel, toLabel) => {
+const calcAndShow = (fromCoord, toCoord, fromLabel, toLabel, considerType) => {
   try {
-    const path = calcPath(geojson, fromCoord, toCoord);
+    const path = calcPath(geojson, fromCoord, toCoord, considerType);
     if (typeof geoJsonLayer !== 'undefined'){
       map.removeLayer(geoJsonLayer);
     }
@@ -153,9 +161,8 @@ document.addEventListener('click', (e) => {
     const fromLabel = from.options[from.selectedIndex].text;
     const toLabel = from.options[to.selectedIndex].text;
     
-    coordsToHash(fromLabel, toLabel, fromCoord, toCoord);
-    
-    calcAndShow(fromCoord, toCoord, fromLabel, toLabel);
+    coordsToHash(fromLabel, toLabel, fromCoord, toCoord, considerTypeWeightElement.checked);
+    calcAndShow(fromCoord, toCoord, fromLabel, toLabel, considerTypeWeightElement.checked);
   }
 });
 
@@ -165,6 +172,6 @@ if (
   hashData.fromCoord && 
   hashData.toCoord 
   ){
-    calcAndShow(hashData.fromCoord, hashData.toCoord, hashData.fromLabel, hashData.toLabel);
+    calcAndShow(hashData.fromCoord, hashData.toCoord, hashData.fromLabel, hashData.toLabel, hashData.considerType);
   }
   

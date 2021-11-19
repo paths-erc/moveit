@@ -13,6 +13,7 @@ const hashToCoords = () => {
         toLabel   : decodeURIComponent(parts[1]),
         fromCoord : parts[2].split(','),
         toCoord   : parts[3].split(','),
+        considerType:decodeURIComponent(parts[4]) === 'considerType',
     };
 }
 module.exports = hashToCoords;
