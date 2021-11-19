@@ -11,6 +11,7 @@
   "devDependencies": {
     "browser-sync": "^2.27.7",
     "browserify": "^17.0.0",
+    "geojson-length": "^0.1.1",
     "geojson-path-finder": "^1.5.2",
     "i": "^0.3.6",
     "leaflet": "^1.7.1",

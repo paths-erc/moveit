@@ -1,5 +1,5 @@
 const PathFinder = require('geojson-path-finder');
-
+const geojsonLength = require('geojson-length');
 
 /**
  * 
@@ -13,12 +13,9 @@ const calcPath = ( geojson, start, dest ) => {
     const gj_start = geoJsonFromArr(start);
     const gj_dest = geoJsonFromArr(dest);
 
-    let additional_cost;
-
     const pathfinder = new PathFinder(geojson, { 
         precision: 1e-3,
         weightFn: function(a, b, props) {
-            additional_cost = props.typeWeight;
             const dx = a[0] - b[0];
             const dy = a[1] - b[1];
             return Math.sqrt(dx * dx + dy * dy) * props.typeWeight;
@@ -45,10 +42,10 @@ const calcPath = ( geojson, start, dest ) => {
         }
         ]
     };
-
+    
     return {
         "geojson": GeoJson,
-        "distance": (Math.round(path.weight/additional_cost * 100) / 100).toFixed(2)
+        "distance": (geojsonLength(GeoJson.features[0].geometry) / 1000).toFixed(2)
     };
 };
 
