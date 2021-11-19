@@ -14,6 +14,56 @@ var map = L.map('map')
 // }).addTo(map);
 L.tileLayer(`https://dh.gu.se/tiles/imperium/{z}/{x}/{y}.png`)
   .addTo(map);
+
+  L.Control.Panel = L.Control.extend({
+    position: 'topleft',
+    onAdd: function(map) {
+      const div = L.DomUtil.create('div');
+      div.innerHTML = `<img src="./img/mo(v)eit.svg" alt="MOvEIT" class="py-3 ">
+      <p class="text-center">A road network for Late Antique Egypt.<br>
+      Built with ♡ by <a href="http:purl.org/lad" title="Laboratorio di Archeologia Digitale alla Sapienza">LAD</a> for <a href="https://atlas.paths-erc.eu" title="PAThs. Archaeological Atlas of Coptic Literature">PAThs</a></p>
+      
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-text">From</span>
+          <select class="form-control" id="from"></select>
+        </div>
+      </div>
+      
+      <div class="form-group my-3">
+        <div class="input-group">
+          <span class="input-group-text">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <select class="form-control" id="to"></select>
+        </div>
+      </div>
+      
+      <div class="d-grid">
+        <button class="btn btn-success btn-block calculate">Calculate</button>
+      </div>
+      
+      <hr>
+      <p class="text-center">Source code, documentation and detailed information 
+      are available on <a href="https://github.com/paths-erc/moveit">GitHub</a>
+      <hr>
+      <a href="http://purl.org/lad" title="LAD: Laboratorio di Archeologia Digitale alla Sapienza">
+        <img src="./img/lad-blue.png" alt="LAD: Laboratorio di Archeologia Digitale alla Sapienza" class="px-5">
+      </a>
+      `;
+
+      div.style['max-width'] = '350px';
+      div.style['background'] = '#ffffff';
+      div.classList.add('p-3');
+      div.classList.add('border');
+
+      return div;
+    }
+});
+
+map.zoomControl.setPosition('topright');
+new L.Control.Panel({ position: 'topleft' }).addTo(map);
+
+
+
 const from = document.getElementById('from');
 const to = document.getElementById('to');
 
@@ -78,7 +128,7 @@ const calcAndShow = (fromCoord, toCoord, fromLabel, toLabel) => {
     }
     geoJsonLayer = L.geoJSON(path.geojson).addTo(map);
     map.fitBounds(geoJsonLayer.getBounds());
-    geoJsonLayer.bindPopup(`Distance from <strong>${fromLabel}</strong> to <strong>${toLabel}</strong>: <strong>${path.distance}</strong> km`).openPopup();
+    geoJsonLayer.bindPopup(`Path from <strong>${fromLabel}</strong> to <strong>${toLabel}</strong>: <strong>${path.distance}</strong> km`).openPopup();
   } catch (error) {
     alert(`Cannot calculate path from ${fromCoord} to ${toCoord}`);
     return;
