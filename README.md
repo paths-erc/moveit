@@ -7,6 +7,9 @@ Since the Atlas is being updated continually, so is this graph; therefore freque
 
 Changes are triggered also by the adding of new connecetions between already known sites, due to advancement in studies or deeper analysis of the available sources. This document will try to keep record of these changes.
 
+## Credits
+MO(v)EIT is a project developed by [LAD: Digital Archaeology Lab at Sapienza](http://purl-org/lad) for PAThs. The applivation has been developed by Julian Bogdani and the road graph has been built by Julian Bogdani and Paolo Rosati.
+
 ## How does it work
 The application calculates the cost of movement from one site (i.e. node of the graph) to the another. The cost is calculated in terms of distance, i.e. the longer is the distance to cover, the higher is the cost of the movement. A second element is added to the calculation, based on the type of the road. A first proposal to differently weight paths assumes the following values as additional cost multiplier:
 - coastal roads and internal valley roads: 1
@@ -54,9 +57,9 @@ Each connection between two points of the graph – i.e. each arc – is represe
 
 
 ## Future development
-Other elements can be added to the calculation of the cost, such as the slope analysis and the presence of objective difficulties in the itinerary, such as water streams. These ‘penalities’ might be weighted as positive costs, while the presence of bridges might be considered as a negative cost. Obstacles and facilities might be added by a variety of sources, such as historical carthografy or literary and archaeological sources.
+Other elements can be added to the calculation of the cost, such as the slope analysis and the presence of objective difficulties in the itinerary, such as water streams. These ‘penalties’ might be weighted as positive costs, while the presence of bridges might be considered as a negative cost. Obstacles and facilities might be added by a variety of sources, such as historical cartography or literary and archaeological sources.
 
-Finally, some development will be done in the next weeks towards a higher degree of abstraction of the entire application, making it possible to use it with another road-graph. Some work is being done in documenting the graph production steps, in order to facilitate the resuse of this code for other contextes.
+Finally, some development will be done in the next weeks towards a higher degree of abstraction of the entire application, making it possible to use it with another road-graph. Some work is being done in documenting the graph production steps, in order to facilitate the reuse of this code for totally different contexts.
 
 ## Zenodo
 MO(v)EIT is available on Zenodo
