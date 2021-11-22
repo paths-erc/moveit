@@ -8,7 +8,7 @@ Since the Atlas is being updated continually, so is this graph; therefore freque
 Changes are triggered also by the adding of new connecetions between already known sites, due to advancement in studies or deeper analysis of the available sources. This document will try to keep record of these changes.
 
 ## How does it work
-The application calculates the cost of movement from one site (i.e. node of the graph) to the another. The cost is calucated in terms of distance, i.e. the longer is the distance to cover, the higher is the cost of the movement. A second element is added to thei calculation, based on the type of the road. A first proposal to differently weight paths assumes the following values for additional cost multiplier:
+The application calculates the cost of movement from one site (i.e. node of the graph) to the another. The cost is calculated in terms of distance, i.e. the longer is the distance to cover, the higher is the cost of the movement. A second element is added to the calculation, based on the type of the road. A first proposal to differently weight paths assumes the following values as additional cost multiplier:
 - coastal roads and internal valley roads: 1
 - channel, rivers and sea routes: 1.5
 - desert paths: 2
