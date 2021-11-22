@@ -54,4 +54,6 @@ Each connection between two points of the graph – i.e. each arc – is represe
 
 
 ## Future development
-Other elements can be added to the calculation of the cost, such as the slope analysis and the presence of objective difficulties in the itinerary, such as water streams. These penalities might be weighted as positive costs, while the presence of bridges might be considered as a negative cost. Obstacles and facilities might be added bya a variety of sources, such as historical carthografy or literary and archaeological sources.
+Other elements can be added to the calculation of the cost, such as the slope analysis and the presence of objective difficulties in the itinerary, such as water streams. These ‘penalities’ might be weighted as positive costs, while the presence of bridges might be considered as a negative cost. Obstacles and facilities might be added by a variety of sources, such as historical carthografy or literary and archaeological sources.
+
+Finally, some development will be done in the next weeks towards a higher degree of abstraction of the entire application, making it possible to use it with another road-graph. Some work is being done in documenting the graph production steps, in order to facilitate the resuse of this code for other contextes.
