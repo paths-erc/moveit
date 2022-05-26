@@ -12,8 +12,9 @@ MO(v)EIT is a project developed by [LAD: Digital Archaeology Lab at Sapienza](ht
 
 ## How does it work
 The application calculates the cost of movement from one site (i.e. node of the graph) to the another. The cost is calculated in terms of distance, i.e. the longer is the distance to cover, the higher is the cost of the movement. A second element is added to the calculation, based on the type of the road. A first proposal to differently weight paths assumes the following values as additional cost multiplier:
+- channel, rivers and sea routes: 0.8
+- sea routes: 1
 - coastal roads and internal valley roads: 1
-- channel, rivers and sea routes: 1.5
 - desert paths: 2
 
 ## Graphically view and calculate paths
@@ -62,6 +63,6 @@ Other elements can be added to the calculation of the cost, such as the slope an
 Finally, some development will be done in the next weeks towards a higher degree of abstraction of the entire application, making it possible to use it with another road-graph. Some work is being done in documenting the graph production steps, in order to facilitate the reuse of this code for totally different contexts.
 
 ## Zenodo
-MO(v)EIT is available on Zenodo
+MO(v)EIT is deposited for long term preservation in Zenodo
 
 [![DOI](https://zenodo.org/badge/278361892.svg)](https://zenodo.org/badge/latestdoi/278361892)
