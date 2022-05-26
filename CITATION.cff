@@ -4,8 +4,8 @@ authors:
   - family-names: Bogdani
     given-names: Julian
     orcid: https://orcid.org/0000-0001-5250-927X
-title: "MO(v)EIT"
-version: 1.0
+title: "MOvEIT"
+version: 1.3.0
 doi: "10.5281/zenodo.5718449"
 date-released: 2021-11-22
 license: "AGPL-3.0"

@@ -1,14 +1,14 @@
-# MO(v)EIT
+# MOvEIT
 A road network for Late Antique Egypt by PAThs
 
-MO(v)EIT is an open-access, collaborative road network that links the archaeological sites published in the [Archaeological Atlas of Coptic Literature](https://atlas.paths-erc.eu) by [PAThs](http://paths.uniroma1.it).
+MOvEIT is an open-access, collaborative road network that links the archaeological sites published in the [Archaeological Atlas of Coptic Literature](https://atlas.paths-erc.eu) by [PAThs](http://paths.uniroma1.it).
 
 Since the Atlas is being updated continually, so is this graph; therefore frequent changes in the next months/years might occur, as new sites are added to the Atlas.
 
 Changes are triggered also by the adding of new connecetions between already known sites, due to advancement in studies or deeper analysis of the available sources. This document will try to keep record of these changes.
 
 ## Credits
-MO(v)EIT is a project developed by [LAD: Digital Archaeology Lab at Sapienza](http://purl-org/lad) for PAThs. The applivation has been developed by Julian Bogdani and the road graph has been built by Julian Bogdani and Paolo Rosati.
+MOvEIT is a project developed by [LAD: Digital Archaeology Lab at Sapienza](http://purl.org/lad) for PAThs. The application has been developed by Julian Bogdani and the road graph has been built by Julian Bogdani and Paolo Rosati. The name MOvEIT has breen creatd by Domizia D'Erasmo.
 
 ## How does it work
 The application calculates the cost of movement from one site (i.e. node of the graph) to the another. The cost is calculated in terms of distance, i.e. the longer is the distance to cover, the higher is the cost of the movement. A second element is added to the calculation, based on the type of the road. A first proposal to differently weight paths assumes the following values as additional cost multiplier:
@@ -16,6 +16,8 @@ The application calculates the cost of movement from one site (i.e. node of the 
 - sea routes: 1
 - coastal roads and internal valley roads: 1
 - desert paths: 2
+
+These parameters are coded in [typeWeights.js](https://github.com/paths-erc/moveit/blob/master/src/typeWeights.js). Feel free to change the muplitplying coefficients at your need.
 
 ## Graphically view and calculate paths
 The road graph is available as a [Single-page application](https://en.wikipedia.org/wiki/Single-page_application) built using open-source libraries, such as:
@@ -37,12 +39,15 @@ To setup the environment follow these few steps, using a shell:
 - Run the test:  
 `npm test`
 
-The test will, recursively, try to calculate paths from each available node (i.e. site, the list of the sites will be downloaded from PAThs central database) to each other available node and this procedure might take **quite a long time** (manu hours). Errors will be printed in real time and also after the procedure finishes.
+The test will, recursively, try to calculate paths from each available node (i.e. site, the list of the sites will be downloaded from PAThs central database) to each other available node and this procedure might take **quite a long time** (many hours). Errors will be printed in real time and also after the procedure finishes.
 
 ## Enhance the graph
-The road graph is available in this repository as a GeoJSON file ([src/geojson/arcs.geojson](src/geojson/arcs.geojson)). It can be easily edited on a GIS software, such as [QGIS](https://www.qgis.org/) or on a web service such as [https://geojson.io/](https://geojson.io/). Arcs (connections between nodes) must be encoded as polylines and a snapping tool is indispensable to precisely link polylines with nodes (sites).
+The road graph is available in this repository in the [data directory](https://github.com/paths-erc/moveit/tree/master/data) where the `graph.gpkg` file is maintained. The Geopackage contains both the road graph and the [QGIS](https://www.qgis.org/) project where alla data are already loaded. The project integrates also a model named `export-road-graph` that can be used to transform the road graph from the Geopackage format to GeoJSON, and performin few in-between transformations:
+- it converts multiplart to singlepart geometries,
+- then it explodes polylines to lines,
+- and finally saves the output as GeoJSON (**edit the destination path to meet your needs**).
 
-Once the editing proccess has come to an end, the updated file must be saved at the same location, i.e. src/geojson/arcs.geojson.
+The final GeoJSON file must be saved as `src/geojson/arcs.geojson`.
 
 Before pubblication, testing the newly created graph is strongly encouraged (se above). 
 
@@ -51,7 +56,7 @@ Finally, data are ready to be built and deployed. A local preview of the applica
 ## Structure of the graph
 Each connection between two points of the graph – i.e. each arc – is represented by a polyline. Each feature is associated by the following information:
 - `name`: name of the road or of the channel, if known
-- `source`: source of the information, it might be *PAThs*, *DARE* or *Satellite*
+- `source`: source of the information, it might be *PAThs*, *AWMC* or *Satellite*
 - `operator`: name of the person who digitized the feature
 - `date`: digitization date
 - `type`: type of the feature. It might be a *channel*, a *coast* road, a *desert* path, a *river* connection, a *sea* connection or *null*.
@@ -63,6 +68,6 @@ Other elements can be added to the calculation of the cost, such as the slope an
 Finally, some development will be done in the next weeks towards a higher degree of abstraction of the entire application, making it possible to use it with another road-graph. Some work is being done in documenting the graph production steps, in order to facilitate the reuse of this code for totally different contexts.
 
 ## Zenodo
-MO(v)EIT is deposited for long term preservation in Zenodo
+MOvEIT is deposited for long term preservation in Zenodo
 
 [![DOI](https://zenodo.org/badge/278361892.svg)](https://zenodo.org/badge/latestdoi/278361892)

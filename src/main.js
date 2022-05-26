@@ -19,7 +19,7 @@ L.tileLayer(`https://dh.gu.se/tiles/imperium/{z}/{x}/{y}.png`)
     position: 'topleft',
     onAdd: function(map) {
       const div = L.DomUtil.create('div');
-      div.innerHTML = `<img src="./img/mo(v)eit.svg" alt="MOvEIT" class="py-3 ">
+      div.innerHTML = `<img src="./img/moveit.svg" alt="MOvEIT" class="py-3 ">
       <p class="text-center">A road network for Late Antique Egypt.<br>
       Built with ♡ by <a href="http:purl.org/lad" title="Laboratorio di Archeologia Digitale alla Sapienza">LAD</a> for <a href="https://atlas.paths-erc.eu" title="PAThs. Archaeological Atlas of Coptic Literature">PAThs</a></p>
       
@@ -134,7 +134,13 @@ const calcAndShow = (fromCoord, toCoord, fromLabel, toLabel, considerType) => {
     if (typeof geoJsonLayer !== 'undefined'){
       map.removeLayer(geoJsonLayer);
     }
-    geoJsonLayer = L.geoJSON(path.geojson).addTo(map);
+    geoJsonLayer = L.geoJSON(path.geojson, {
+      style: {
+        color: "#f7801e",
+        weight: 5,
+        opacity: 0.7
+      }
+    }).addTo(map);
     map.fitBounds(geoJsonLayer.getBounds());
     geoJsonLayer.bindPopup(`Path from <strong>${fromLabel}</strong> to <strong>${toLabel}</strong>: <strong>${path.distance}</strong> km`).openPopup();
   } catch (error) {
