@@ -1,5 +1,5 @@
 # MOvEIT
-A road network for Late Antique Egypt by PAThs
+A road network for Late Antique Egypt by LAD & PAThs
 
 MOvEIT is an open-access, collaborative road network that links the archaeological sites published in the [Archaeological Atlas of Coptic Literature](https://atlas.paths-erc.eu) by [PAThs](http://paths.uniroma1.it).
 
